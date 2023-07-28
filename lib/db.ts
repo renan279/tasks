@@ -1,16 +1,16 @@
 import { prisma } from "./prisma";
 
-export interface Todo {
+export interface Todos {
   id: number;
   description: String;
 }
 
 export async function getAllTodos(){
-  const data = await prisma.todo.findMany(); 
+  const data = await prisma.todos.findMany(); 
 }
 
 export async function createTodo(description: string){
-  await prisma.todo.create({
+  await prisma.todos.create({
     data: {
       description,
     },
