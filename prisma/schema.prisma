@@ -8,14 +8,15 @@ generator client {
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  relationMode = "prisma" //
 }
 
 model Todos {
   id          String    @id @default(uuid())
-  description String
+  description String //obrigatório
   favoritar   Boolean   @default(false)
-  data        DateTime?
+  done        Boolean   @default(false)
+  // data        DateTime? //valor opcional
 
   create_at DateTime @default(now())
   update_at DateTime @updatedAt

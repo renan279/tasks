@@ -1,14 +1,22 @@
-// export const getServerSideProps = () => {
-//   const
-//   return ({
-//     props: {
+import { GetServerSideProps } from "next"
+import { getAllTodos } from "../../lib/db";
+import { Todos } from "@prisma/client";
 
-//     }
-//   })
-// }
-
-export default function Home() {
-  return (
-    <div></div>
-  )
+export const getServerSideProps: GetServerSideProps = async () => {
+  const todos = await getAllTodos();
+  return ({
+    props: {
+      todos,
+    }
+  })
 }
+
+interface PostProps {
+  todos: Todos[];
+}
+
+const Home = ({ todos }: PostProps) => {
+  return <div>{JSON.stringify(todos, null, 4)}</div>;
+};
+
+export default Home;
