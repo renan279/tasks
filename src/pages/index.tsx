@@ -1,23 +1,24 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import { GetServerSideProps } from "next"
+import { getAllTodos } from "../../lib/db";
+import { Todos } from "@prisma/client";
 
-const inter = Inter({ subsets: ['latin'] })
+export const getServerSideProps = async () => {
+  const todos = await getAllTodos();
+  
+  return ({
+    props: {
+      todos: todos || [],
+    }
+  })
 
-export default function Home() {
-  return (
-
-      
-
-      <div>
-        <Image
-          src="/yey.gif"
-          alt="Yey"
-          width={500}
-          height={226}
-          priority
-        />
-      </div>
-
-      
-  )
 }
+
+interface PostProps {
+  todos: Todos[];
+}
+
+const Home = ({ todos }: PostProps) => {
+  return <div>{ JSON.stringify(todos, null, 4) }</div>;
+};
+
+export default Home;

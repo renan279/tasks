@@ -12,12 +12,13 @@ datasource db {
 }
 
 model Todos {
-  id          String    @id @default(uuid())
-  description String //obrigatório
-  favoritar   Boolean   @default(false)
-  done        Boolean   @default(false)
-  // data        DateTime? //valor opcional
+  id          Int    @id @default(autoincrement())
+  description String @db.Text() //obrigatório
 
-  create_at DateTime @default(now())
-  update_at DateTime @updatedAt
+  // id          String    @id @default(uuid())
+  // favoritar   Boolean   @default(false)
+  // done        Boolean   @default(false)
+  // data        DateTime? //valor opcional
+  // create_at DateTime @default(now())
+  // update_at DateTime @updatedAt
 }
