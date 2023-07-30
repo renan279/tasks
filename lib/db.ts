@@ -5,15 +5,23 @@ export interface Todos {
   description: String;
 }
 
-export async function getAllTodos(){
+export async function getAllTodos() {
   const data = await prisma.todos.findMany(); //esse prisma vem do prisma.ts
   return data;
 }
 
-export async function createTodos(description: string){
+export async function createTodos(description: string) {
   await prisma.todos.create({
     data: {
       description,
+    },
+  });
+}
+
+export async function deleteTodos(id: number) {
+  await prisma.todos.delete({
+    where: {
+      id: id,
     },
   });
 }
