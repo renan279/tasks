@@ -25,3 +25,14 @@ export async function deleteTodos(id: number) {
     },
   });
 }
+
+export async function editarTodos(id: number, description: string) {
+  await prisma.todos.update({
+    where: {
+      id: id,
+    },
+    data: {
+      description: description,
+    },
+  });
+}
