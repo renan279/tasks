@@ -33,6 +33,7 @@ const Home = ({ todos }: PostProps) => {
       method: 'DELETE',
       body: JSON.stringify(todoId),
     })
+    return location.reload();
   }
 
   // const deleteTodo = async (todoId: number) => {
