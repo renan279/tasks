@@ -26,6 +26,7 @@ const Home = ({ todos }: PostProps) => {
       method: 'POST',
       body: JSON.stringify(description),
     })
+    return location.reload();
   }
 
   const deleteItem = async (todoId: number) => {
@@ -55,7 +56,7 @@ const Home = ({ todos }: PostProps) => {
       <div>
         <form className="flex justify-center mt-10">
           <div className="bg-gray-50 p-8 rounded-lg">
-            <h1 className="text-center mb-4">Escreva coisas para fazer:</h1>
+            <h1 className="text-center text-black mb-4">Escreva coisas para fazer:</h1>
             <div className="flex space-x-2 p-2 bg-white rounded-md">
               <input
                 value={description}
@@ -92,7 +93,7 @@ const Home = ({ todos }: PostProps) => {
                   <span className="absolute -left-3 -top-3 bg-green-500 flex justify-center items-center rounded-full w-8 h-8 text-gray-50 font-bold">
                     {index + 1}
                   </span>
-                  <p className="bg-white px-12 py-8 rounded-lg w-80">
+                  <p className="bg-white text-black px-12 py-8 rounded-lg w-80">
                     {item.description}
                   </p>
                 </div>
