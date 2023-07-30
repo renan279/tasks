@@ -8,7 +8,7 @@ export const getServerSideProps = async () => {
 
   return ({
     props: {
-      todos,
+      todos: todos || [],
     }
   })
 
