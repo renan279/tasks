@@ -1,11 +1,19 @@
 import { GetServerSideProps } from "next"
 import { getAllTodos } from "../../lib/db";
 import { Todos } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 
+import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+
+import styled, { createGlobalStyle } from 'styled-components';
+
+import GlobalStyle from '../styles';
+
+
 const fetcher = (input: RequestInfo | URL, init?: RequestInit | undefined) => fetch(input, init).then((res) => res.json())
- 
+
 // export const getServerSideProps = async () => {
 //   const todos = await getAllTodos();
 
@@ -27,21 +35,76 @@ const Home = () => {
   const { data: todos, error, isLoading, mutate } = useSWR('/api/todos', fetcher);
   // const [todos, setTodos] = useState<object[] | null>([]);
 
+  // const notify = () => toast.success('testando', {
+  //   position: "top-center",
+  //   autoClose: 5000
+  // });
+
+  // function handleSucess(){
+  //   toast.success('haha');
+  // }
+
   const handleClick = async () => {
-    await fetch("/api/todos", {
+    const response = await fetch("/api/todos", {
       method: 'POST',
       body: JSON.stringify(description),
     })
+
+    if (response.status == 200) {
+      toast.success('Lembrete deletado!');
+    } else {
+      toast.error('Algo deu errado.');
+    }
+
     mutate();
   }
 
+
+
   const deleteItem = async (todoId: number) => {
-    await fetch("/api/todos", {
-      method: 'DELETE',
-      body: JSON.stringify(todoId),
-    })
+
+    // toast.loading("Loading...")
+
+    // const response = await fetch("/api/todos", {
+    //   method: 'DELETE',
+    //   body: JSON.stringify(todoId),
+    // })
+    // if (response.status == 200) {
+    //   toast.success('Lembrete deletado!');
+    // } else {
+    //   toast.error('Algo deu errado.');
+    // }
+    // mutate();
+
+    const response = await toast.promise(
+      fetch("/api/todos", {
+        method: 'DELETE',
+        body: JSON.stringify(todoId),
+      }),
+      {
+        pending: 'Deletando...',
+        success: 'Deletado! 👌',
+        error: 'Erro ao deletar. 🤯'
+      }
+    );
+    console.log(response);
     mutate();
+
+    // try {
+    //   await fetch("/api/todos", {
+    //     method: 'DELETE',
+    //     body: JSON.stringify(todoId),
+    //   });
+    //   toast.success('Lembrete deletado!');
+    //   mutate();
+    // } catch (error) {
+    //   toast.error('Algo deu errado.');
+    //   console.error('Erro ao fazer a chamada fetch:', error);
+    // }
+
   }
+
+
 
   // if (isLoading){
   //   return <div>reloading</div>
@@ -51,8 +114,8 @@ const Home = () => {
   //   const result: any = await fetch("/api/todos", {
   //     method: 'GET',
   //   })
-    // console.log('esse valor -> ', await result.json());
-    // setTodos(await result.json());
+  // console.log('esse valor -> ', await result.json());
+  // setTodos(await result.json());
   // }
 
   // useEffect(() => {
@@ -120,7 +183,6 @@ const Home = () => {
                         </svg>
                       </span>
                     </button>
-
                   </div>
                   <span className="absolute -left-3 -top-3 bg-green-500 flex justify-center items-center rounded-full w-8 h-8 text-gray-50 font-bold">
                     {index + 1}
@@ -132,7 +194,6 @@ const Home = () => {
               </div>
             ))
           }
-
         </div>
       </div>
     </div>

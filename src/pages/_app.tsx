@@ -1,6 +1,19 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 
+import ToastAnimated, { showToast } from "../components/MyToast";
+import Notifications from '../pages/Notifications';
+
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  const handleClick = () =>
+    showToast({ type: "success", message: "Mensagem de sucesso" });
+  return (
+    <>
+      <Component {...pageProps} />
+      <ToastAnimated />
+      {/* <Notifications /> */}
+      {/* <button onClick={handleClick}>Exibir alerta</button> */}
+    </>
+  );
+
 }
