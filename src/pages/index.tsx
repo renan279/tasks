@@ -1,32 +1,38 @@
 import { GetServerSideProps } from "next"
 import { getAllTodos } from "../../lib/db";
 import { Todos } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 
-export const getServerSideProps = async () => {
-  const todos = await getAllTodos();
+const fetcher = (...args: any[]) => fetch([...args]).then((res) => res.json())
+ 
+// export const getServerSideProps = async () => {
+//   const todos = await getAllTodos();
 
-  return ({
-    props: {
-      todos: todos || [],
-    }
-  })
+//   return ({
+//     props: {
+//       todos: todos || [],
+//     }
+//   })
 
-}
+// }
 
-interface PostProps {
-  todos: Todos[];
-}
+// interface PostProps {
+//   todos: Todos[];
+// }
 
-const Home = ({ todos }: PostProps) => {
+const Home = () => {
   const [description, setDescription] = useState("");
+
+  const { data: todos, error, isLoading, mutate } = useSWR('/api/todos', fetcher)
+  // const [todos, setTodos] = useState<object[] | null>([]);
 
   const handleClick = async () => {
     await fetch("/api/todos", {
       method: 'POST',
       body: JSON.stringify(description),
     })
-    return location.reload();
+    mutate();
   }
 
   const deleteItem = async (todoId: number) => {
@@ -34,11 +40,38 @@ const Home = ({ todos }: PostProps) => {
       method: 'DELETE',
       body: JSON.stringify(todoId),
     })
-    return location.reload();
+    mutate();
   }
 
+  // if (isLoading){
+  //   return <div>reloading</div>
+  // }
+
+  // const getItem = async () => {
+  //   const result: any = await fetch("/api/todos", {
+  //     method: 'GET',
+  //   })
+    // console.log('esse valor -> ', await result.json());
+    // setTodos(await result.json());
+  // }
+
+  // useEffect(() => {
+  //   getItem();
+  // }, []);
+
+  // useEffect(() => {
+  // }, [todos]);  
+
+  // const getItem = async (todoId: number) => {
+  //   await fetch("/api/todos", {
+  //     method: 'DELETE',
+  //     body: JSON.stringify(todoId),
+  //   })
+  //   return location.reload();
+  // }
+
   const editarItem = async (todoId: number, texto: string) => {
-    console.log('editarItem -> ', todoId, description);
+    console.log('editarItem -> ', todoId, description, JSON.stringify({ description, todoId }));
     setDescription(texto);
     // await fetch("/api/todos", {
     //   method: 'UPDATE',
@@ -69,17 +102,17 @@ const Home = ({ todos }: PostProps) => {
         </form>
         <div>
           {
-            todos?.map((item, index) => (
+            todos?.map((item: any, index: any) => (
               <div key={item.id} className="flex justify-center">
                 <div className=" relative justify-center mt-6">
                   <div className="absolute flex top-0 right-0 p-3 space-x-1">
-                    {/* <button onClick={() => editarItem(item.id, item.description)}>
+                    <button onClick={() => editarItem(item.id, item.description)}>
                       <span>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       </span>
-                    </button> */}
+                    </button>
                     <button onClick={() => deleteItem(item.id)}>
                       <span>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
