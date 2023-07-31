@@ -4,7 +4,7 @@ import { Todos } from "@prisma/client";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-const fetcher = (...args: any[]) => fetch([...args]).then((res) => res.json())
+const fetcher = (input: RequestInfo | URL, init?: RequestInit | undefined) => fetch(input, init).then((res) => res.json())
  
 // export const getServerSideProps = async () => {
 //   const todos = await getAllTodos();
@@ -24,7 +24,7 @@ const fetcher = (...args: any[]) => fetch([...args]).then((res) => res.json())
 const Home = () => {
   const [description, setDescription] = useState("");
 
-  const { data: todos, error, isLoading, mutate } = useSWR('/api/todos', fetcher)
+  const { data: todos, error, isLoading, mutate } = useSWR('/api/todos', fetcher);
   // const [todos, setTodos] = useState<object[] | null>([]);
 
   const handleClick = async () => {
