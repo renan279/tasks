@@ -45,36 +45,26 @@ const Home = () => {
   // }
 
   const handleClick = async () => {
-    const response = await fetch("/api/todos", {
-      method: 'POST',
-      body: JSON.stringify(description),
-    })
 
-    if (response.status == 200) {
-      toast.success('Lembrete deletado!');
-    } else {
-      toast.error('Algo deu errado.');
-    }
-
+    const response = await toast.promise(
+      fetch("/api/todos", {
+        method: 'POST',
+        body: JSON.stringify(description),
+      }),
+      {
+        pending: 'Postando...',
+        success: 'Postado! 👌',
+        error: 'Erro ao postar. 🤯'
+      }
+    );
+    console.log(response);
     mutate();
+
   }
 
 
 
   const deleteItem = async (todoId: number) => {
-
-    // toast.loading("Loading...")
-
-    // const response = await fetch("/api/todos", {
-    //   method: 'DELETE',
-    //   body: JSON.stringify(todoId),
-    // })
-    // if (response.status == 200) {
-    //   toast.success('Lembrete deletado!');
-    // } else {
-    //   toast.error('Algo deu errado.');
-    // }
-    // mutate();
 
     const response = await toast.promise(
       fetch("/api/todos", {
@@ -89,18 +79,6 @@ const Home = () => {
     );
     console.log(response);
     mutate();
-
-    // try {
-    //   await fetch("/api/todos", {
-    //     method: 'DELETE',
-    //     body: JSON.stringify(todoId),
-    //   });
-    //   toast.success('Lembrete deletado!');
-    //   mutate();
-    // } catch (error) {
-    //   toast.error('Algo deu errado.');
-    //   console.error('Erro ao fazer a chamada fetch:', error);
-    // }
 
   }
 
