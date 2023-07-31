@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import styled, { createGlobalStyle } from 'styled-components';
 
-import GlobalStyle from '../styles';
+// import GlobalStyle from '../styles';
 
 
 const fetcher = (input: RequestInfo | URL, init?: RequestInit | undefined) => fetch(input, init).then((res) => res.json())
